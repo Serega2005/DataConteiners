@@ -37,9 +37,35 @@ public:
 		size = 0;
 	    cout << "LConstructor:\t" << this << endl;
 	}
+	ForwardList(const ForwardList& other)
+	{
+		Element* Temp = other.Head;
+		while (Temp)
+		{
+			push_back(Temp->Data);
+			Temp = Temp->pNext;
+		}
+		cout << "LCopyConstructor" << this << endl;
+	}
 	~ForwardList()
 	{
+		while (Head)pop_front();
 		cout << "LDestructor:\t" << this << endl;
+	}
+
+	//        Operators:
+	ForwardList& operator=(const ForwardList& other)
+	{
+		if (this == &other)return *this;
+		while (Head)pop_front();
+		Element* Temp = other.Head;
+		while (Temp)
+		{
+			push_back(Temp->Data);
+			Temp = Temp->pNext;
+		}
+		cout << "LCopyAssignmemt" << this << endl;
+		return *this;
 	}
 
 	//        Adding elements:
@@ -102,6 +128,26 @@ public:
 		Temp->pNext = nullptr;
 		size--;
 	}
+	void erase(int index)
+	{
+		if (index > size)return;
+		if (index == 0)
+		{
+			pop_front();
+			return;
+		}
+		//1)Доходим до нужного элемента:
+		Element* Temp = Head;
+		for (int i = 0; i < index-1; i++)
+			Temp = Temp->pNext;
+		//2)Запоминаем удаляемого элемента:
+		Element* to_del = Temp->pNext;
+		//3)Исключам удаляемый элемент из списка:
+		Temp->pNext = Temp->pNext->pNext;
+		//4)Удаляем элемент из памяти:
+		delete to_del;
+		size--;
+	}
 
 	//           Methods:
 	void print()
@@ -117,6 +163,8 @@ public:
 	}
 };
 
+//#define BASE_CHECK
+
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -127,7 +175,9 @@ void main()
 	{
 		list.push_front(rand() % 100);
 	}
+	list = list;
 	list.print();
+#ifdef BASE_CHECK
 	/*cout << delimiter << endl;
 	list.pop_front();
 	list.pop_back();
@@ -138,11 +188,23 @@ void main()
 	cout << "Введите индекс добавляемого значения: "; cin >> index;
 	list.insert(value, index);
 	list.print();
+	cout << "Введите индекс удаляемого значения: "; cin >> index;
+	list.erase(index);
+	list.print();
 
-	cout << "Еще один список:\n";
+	/*cout << "Еще один список:\n";
 	ForwardList list2;
 	list2.push_back(3);
 	list2.push_back(5);
 	list2.push_back(8);
+	list2.print();*/
+#endif // BASE_CHECK
+
+	/*ForwardList list2 = list;
 	list2.print();
+
+	ForwardList list3;
+	list3 = list2;
+	list3.print();*/
+
 }
