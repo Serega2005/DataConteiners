@@ -20,10 +20,58 @@ public:
 		count--;
 		cout << "EDestructor:\t" << this << endl;
 	}
+	friend class Iterator;
 	friend class ForwardList;
 };
 
 int Element::count = 0;//Инициализация статической переменной
+
+class Iterator
+{
+	Element* Temp;
+public:
+	Iterator(Element* Temp = nullptr)
+	{
+		this->Temp = Temp;
+		cout << "IConstructor:\t" << this << endl;
+	}
+	~Iterator()
+	{
+		cout << "IDestructor:\t" << this << endl;
+	}
+
+	//           Operators:
+	Iterator& operator++()
+	{
+		Temp = Temp->pNext;
+		return *this;
+	}
+
+	Iterator operator++(int)
+	{
+		Iterator old = *this;
+		Temp = Temp->pNext;
+		return old;
+	}
+
+	bool operator==(const Iterator& other)const
+	{
+		return this->Temp == other.Temp;
+	}
+	bool operator!=(const Iterator& other)const
+	{
+		return this->Temp != other.Temp;
+	}
+
+	Element*& operator->()
+	{
+		return Temp;
+	}
+	Element* get_current_address()
+	{
+		return Temp;
+	}
+};
 
 class ForwardList
 {
@@ -71,9 +119,9 @@ public:
 	//        Adding elements:
 	void push_front(int Data)
 	{
-		Element* New = new Element(Data);
-		New->pNext = Head;
-		Head = New;
+		/*Element* New = new Element(Data);
+		New->pNext = New;*/
+		Head = new Element(Data, Head);
 		size++;
 	}
 	void push_back(int Data)
@@ -84,11 +132,11 @@ public:
 			push_front(Data);
 			return;
 		}
-		Element* New = new Element(Data);
+		//Element* New = new Element(Data);
 		Element* Temp = Head;
 		while (Temp->pNext != nullptr)
 			Temp = Temp->pNext;
-		Temp->pNext = New;
+		Temp->pNext = new Element(Data);
 		size++;
 	}
 	void insert(int Data, int index)
@@ -98,13 +146,14 @@ public:
 			push_front(Data);
 			return;
 		}
-		Element* New = new Element(Data);
+		//Element* New = new Element(Data);
 		Element* Temp = Head;
 		for (int i = 0; i < index - 1; i++, Temp = Temp->pNext)
 			if (Temp->pNext == nullptr)break;
 		//Temp = Temp->pNext;
-		New->pNext = Temp->pNext;
-		Temp->pNext = New;
+		/*New->pNext = Temp->pNext;
+		Temp->pNext = New;*/
+		Temp->pNext = new Element(Data, Temp->pNext);
 		size++;
 	}
 
@@ -152,18 +201,23 @@ public:
 	//           Methods:
 	void print()
 	{
-		Element* Temp = Head;
+		/*Element* Temp = Head;
 		while (Temp != nullptr)
 		{
 			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 			Temp = Temp->pNext;
-		}
+		}*/
+		//for (Element* Temp = Head; Temp; Temp = Temp->pNext)
+			//cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+		for (Iterator Temp = Head; Temp != nullptr; Temp++)
+			cout << Temp.get_current_address() << tab << Temp->Data << tab << Temp->pNext << endl;
+		cout << endl;
 		cout << "Количество элементов в списке: " << size << endl;
 		cout << "Общее количество элементов:    " << Element::count << endl;
 	}
 };
 
-//#define BASE_CHECK
+#define BASE_CHECK
 
 void main()
 {
