@@ -1,8 +1,12 @@
 ﻿#include<iostream>
 using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
 
 #define tab "\t"
 #define delimiter "\n----------------------------------------------------\n"
+//#define DEBUG
 
 class Element
 {
@@ -13,12 +17,16 @@ public:
 	Element(int Data, Element* pNext = nullptr) :Data(Data), pNext(pNext)
 	{
 		count++;
+#ifdef DEBUG
 		cout << "EConstructor:\t" << this << endl;
+#endif // DEBUG
 	}
 	~Element()
 	{
 		count--;
+#ifdef DEBUG
 		cout << "EDestructor:\t" << this << endl;
+#endif // DEBUG
 	}
 	friend class Iterator;
 	friend class ForwardList;
@@ -33,11 +41,15 @@ public:
 	Iterator(Element* Temp = nullptr)
 	{
 		this->Temp = Temp;
+#ifdef DEBUG
 		cout << "IConstructor:\t" << this << endl;
+#endif // DEBUG
 	}
 	~Iterator()
 	{
+#ifdef DEBUG
 		cout << "IDestructor:\t" << this << endl;
+#endif // DEBUG
 	}
 
 	//           Operators:
@@ -71,6 +83,14 @@ public:
 	{
 		return Temp;
 	}
+	const int& operator*()const
+	{
+		return Temp->Data;
+	}
+	int& operator*()
+	{
+		return Temp->Data;
+	}
 };
 
 class ForwardList
@@ -78,12 +98,36 @@ class ForwardList
 	Element* Head;
 	int size;
 public:
+	Iterator getHead()
+	{
+		return Head;
+	}
+
+	Iterator begin()
+	{
+		return Head;
+	}
+	Iterator end()
+	{
+		return nullptr;
+	}
+
 	ForwardList() :Head(nullptr)
 	{
 		//DefaultConstructor создает пустой список.
 		Head = nullptr;
 		size = 0;
-	    cout << "LConstructor:\t" << this << endl;
+#ifdef DEBUG
+		cout << "LConstructor:\t" << this << endl;
+#endif // DEBUG
+	}
+	ForwardList(initializer_list<int> il) : ForwardList()
+	{
+		cout << typeid(il.begin()).name() << endl;
+		for (int const* it = il.begin(); it != il.end(); it++)
+		{
+			push_back(*it);
+		}
 	}
 	ForwardList(const ForwardList& other)
 	{
@@ -187,7 +231,7 @@ public:
 		}
 		//1)Доходим до нужного элемента:
 		Element* Temp = Head;
-		for (int i = 0; i < index-1; i++)
+		for (int i = 0; i < index - 1; i++)
 			Temp = Temp->pNext;
 		//2)Запоминаем удаляемого элемента:
 		Element* to_del = Temp->pNext;
@@ -210,18 +254,22 @@ public:
 		//for (Element* Temp = Head; Temp; Temp = Temp->pNext)
 			//cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 		for (Iterator Temp = Head; Temp != nullptr; Temp++)
-			cout << Temp.get_current_address() << tab << Temp->Data << tab << Temp->pNext << endl;
+			//cout << Temp.get_current_address() << tab << Temp->Data << tab << Temp->pNext << endl;
+			cout << *Temp << tab;
 		cout << endl;
 		cout << "Количество элементов в списке: " << size << endl;
 		cout << "Общее количество элементов:    " << Element::count << endl;
 	}
 };
 
-#define BASE_CHECK
+//#define BASE_CHECK
+//#define ITERATOR_CHECK
+//#define RANGE_BASED_ARRAY
 
 void main()
 {
 	setlocale(LC_ALL, "");
+#ifdef BASE_CHECK
 	int n;
 	cout << "Введите размер списка: "; cin >> n;
 	ForwardList list;
@@ -229,8 +277,18 @@ void main()
 	{
 		list.push_front(rand() % 100);
 	}
+	list.print();
+#endif // BASE_CHECK
+
+#ifdef ITERATOR_CHECK
+	for (Iterator it = list.getHead(); it != nullptr; it++)
+	{
+		*it = rand() % 100;
+	}
 	list = list;
 	list.print();
+#endif // ITERATOR_CHECK
+
 #ifdef BASE_CHECK
 	/*cout << delimiter << endl;
 	list.pop_front();
@@ -261,4 +319,27 @@ void main()
 	list3 = list2;
 	list3.print();*/
 
+#ifdef RANGE_BASED_ARRAY
+	int arr[] = { 3,5,8,13,21 };
+	cout << size(arr) << endl;
+	int razmer = 0;
+	for (int i = 0; i < size(arr); i++)
+	{
+		cout << arr[i] << tab;
+	}
+	cout << endl;
+	for (int i : arr)//Renge-based for (цикл for для диапазона, для контейнера)
+	{
+		cout << i << tab;
+	}
+	cout << endl;
+#endif // RANGE_BASED_ARRAY
+
+	ForwardList list = { 3,5,8,13,21 };
+	list.print();
+	for (int i : list)
+	{
+		cout << i << tab;
+	}
+	cout << endl;
 }
