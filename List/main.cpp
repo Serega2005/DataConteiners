@@ -5,7 +5,7 @@ using std::endl;
 using std::cin;
 
 #define tab "\t"
-#define delimiter "\t-------------------------------------------------------\t"
+#define delimiter "\n-------------------------------------------------------\n"
 
 class List
 {
@@ -58,11 +58,22 @@ public:
 			Temp = Temp->pNext;
 			return* this;
 		}
-
 		Iterator operator++(int)
 		{
 			Iterator old = *this;
 			Temp = Temp->pNext;
+			return old;
+		}
+
+		Iterator& operator--()
+		{
+			Temp = Temp->pPrev;
+			return* this;
+		}
+		Iterator operator--(int)
+		{
+			Iterator old = *this;
+			Temp = Temp->pPrev;
 			return old;
 		}
 
@@ -85,6 +96,64 @@ public:
 		}
 
 	};
+	class ReverseIterator
+	{
+		Element* Temp;
+	public:
+		ReverseIterator(Element* Temp = nullptr) :Temp(Temp)
+		{
+#ifdef DEBUG
+			cout << "RITConstructor:\t" << this << endl;
+#endif // DEBUG
+		}
+		~ReverseIterator()
+		{
+#ifdef DEBUG
+			cout << "RITDestructor:\t << this << endl;
+#endif // DEBUG
+		}
+
+		ReverseIterator& operator++()
+		{
+			Temp = Temp->pPrev;
+			return *this;
+		}
+		ReverseIterator operator++(int)
+		{
+			ReverseIterator old = *this;
+			Temp = Temp->pPrev;
+			return old;
+		}
+
+		ReverseIterator& operator--()
+		{
+			Temp = Temp->pNext;
+			return *this;
+		}
+		ReverseIterator operator--(int)
+		{
+			ReverseIterator old = *this;
+			Temp = Temp->pNext;
+			return old;
+		}
+		bool operator==(const ReverseIterator& other)const
+		{
+			return this->Temp == other.Temp;
+		}
+		bool operator!=(const ReverseIterator& other)const
+		{
+			return this->Temp != other.Temp;
+		}
+
+		const int& operator*()const
+		{
+			return Temp->Data;
+		}
+		int& operator*()
+		{
+			return Temp->Data;
+		}
+	};
 	size_t getSize()const
 	{
 		return size;
@@ -95,6 +164,14 @@ public:
 		return Head;
 	}
 	Iterator end()
+	{
+		return nullptr;
+	}
+	ReverseIterator rbegin()
+	{
+		return Tail;
+	}
+	ReverseIterator rend()
 	{
 		return nullptr;
 	}
@@ -330,7 +407,13 @@ void main()
 	for (int i : list)
 		cout << i << tab;
 	cout << endl;
-	for (List::Iterator it = list.begin(); it != list.end(); it++)
+	for (List::Iterator it = list.begin(); it != list.end(); ++it)
+	{
+		cout << *it << tab;
+	}
+	cout << endl;
+	cout << delimiter << endl;
+	for (List::ReverseIterator it = list.rbegin(); it != list.rend(); ++it)
 	{
 		cout << *it << tab;
 	}
