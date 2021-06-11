@@ -35,12 +35,47 @@ class List
 	Element* Head;
 	Element* Tail;
 	unsigned int size;
-public:
-	class Iterator 
+
+	class BaseIterator
 	{
+	protected:
 		Element* Temp;
 	public:
-		Iterator(Element* Temp = nullptr) :Temp(Temp)
+		BaseIterator(Element* Temp = nullptr) :Temp(Temp)
+		{
+#ifdef DEBUG
+			cout << "BITConstructor:\t" << this << endl;
+#endif //DEBUG
+		}
+		~BaseIterator()
+		{
+#ifdef DEBUG
+			cout << "BITDestructor:\t" << this << endl;
+#endif //DEBUG
+		}
+		const int& operator*()const
+		{
+			return Temp->Data;
+		}
+		int& operator*()
+		{
+			return Temp->Data;
+		}
+
+		bool operator==(const BaseIterator& other)const
+		{
+			return this->Temp == other.Temp;
+		}
+		bool operator!=(const BaseIterator& other)const
+		{
+			return this->Temp != other.Temp;
+		}
+	};
+public:
+	class Iterator :public BaseIterator
+	{
+	public:
+		Iterator(Element* Temp = nullptr) :BaseIterator(Temp)
 		{
 #ifdef DEBUG
 			cout << "ITConstructor:\t" << this << endl;
@@ -77,30 +112,19 @@ public:
 			return old;
 		}
 
-		bool operator==(const Iterator& other)const
+		/*bool operator==(const Iterator& other)const
 		{
 			return this->Temp == other.Temp;
 		}
 		bool operator!=(const Iterator& other)const
 		{
 			return this->Temp != other.Temp;
-		}
-
-		const int& operator*()const
-		{
-			return Temp->Data;
-		}
-		int& operator*()
-		{
-			return Temp->Data;
-		}
-
+		}*/
 	};
-	class ReverseIterator
+	class ReverseIterator :public BaseIterator
 	{
-		Element* Temp;
 	public:
-		ReverseIterator(Element* Temp = nullptr) :Temp(Temp)
+		ReverseIterator(Element* Temp = nullptr) :BaseIterator(Temp)
 		{
 #ifdef DEBUG
 			cout << "RITConstructor:\t" << this << endl;
@@ -136,23 +160,14 @@ public:
 			Temp = Temp->pNext;
 			return old;
 		}
-		bool operator==(const ReverseIterator& other)const
+		/*bool operator==(const ReverseIterator& other)const
 		{
 			return this->Temp == other.Temp;
 		}
 		bool operator!=(const ReverseIterator& other)const
 		{
 			return this->Temp != other.Temp;
-		}
-
-		const int& operator*()const
-		{
-			return Temp->Data;
-		}
-		int& operator*()
-		{
-			return Temp->Data;
-		}
+		}*/
 	};
 	size_t getSize()const
 	{
