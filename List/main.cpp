@@ -173,10 +173,17 @@ public:
 	{
 		return size;
 	}
-
+	const Iterator begin()const
+	{
+		return Head;
+	}
 	Iterator begin()
 	{
 		return Head;
+	}
+	const Iterator end()const
+	{
+		return nullptr;
 	}
 	Iterator end()
 	{
@@ -206,6 +213,11 @@ public:
 		cout << typeid(il.begin()).name() << endl;
 		for (int const* it = il.begin(); it != il.end(); it++)puch_back(*it);
 	}
+	List(const List& other):List()
+	{
+		for (int i : other)puch_back(i);
+		cout << "CopyConstructor:\t" << this << endl;
+	}
 	~List()
 	{
 		//while (Head)pop_front();
@@ -214,6 +226,13 @@ public:
 	}
 
 	//               Operators:
+	List& operator=(const List& other)
+	{
+		if (this == &other)return *this;
+		while (Head)pop_front();
+		for (int i : other)puch_back(i);
+		cout << "CopyAssignment:\t" << this << endl;
+	}
 	int& operator[](int index)
 	{
 		Element* Temp;
@@ -375,6 +394,7 @@ public:
 
 //#define BASE_CHECK
 //#define SIZE_CONSTRUCTOR_AND_INDEX_OPERATOR
+//#define ITERATORs_CHECK
 
 void main()
 {
@@ -417,6 +437,7 @@ void main()
 	list.print();
 #endif // SIZE_CONSTRUCTOR_AND_INDEX_OPERATOR
 
+#ifdef ITERATORS_CHECK
 	List list = { 3, 5, 8, 13 ,21 };
 	list.print();
 	for (int i : list)
@@ -433,4 +454,12 @@ void main()
 		cout << *it << tab;
 	}
 	cout << endl;
+#endif // ITERATORS_CHECK
+
+	List list1 = { 3,5,8,13,21 };
+	list1.print();
+	List list2 = list1;//CopyConstructor
+	//List list2;
+	//list2 = list1;//CopyAssignment
+	list2.print();
 }
