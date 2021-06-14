@@ -392,9 +392,17 @@ public:
 	}
 };
 
+List operator+(const List& left, const List& right)
+{
+	List cat = left;
+	for (int i : right)cat.puch_back(i);
+	return cat;
+}
+
 //#define BASE_CHECK
 //#define SIZE_CONSTRUCTOR_AND_INDEX_OPERATOR
 //#define ITERATORs_CHECK
+//#define COPY_METHODS_CHECK
 
 void main()
 {
@@ -456,10 +464,17 @@ void main()
 	cout << endl;
 #endif // ITERATORS_CHECK
 
+#ifdef COPY_METHODS_CHECK
 	List list1 = { 3,5,8,13,21 };
 	list1.print();
 	List list2 = list1;//CopyConstructor
 	//List list2;
 	//list2 = list1;//CopyAssignment
 	list2.print();
+#endif // COPY_METHODS_CHECK
+
+	List list1 = { 3,5,8,13,21 };
+	List list2 = { 34,55,89 };
+	List list3 = list1 + list2;
+	list3.print();
 }
