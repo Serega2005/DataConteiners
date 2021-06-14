@@ -5,7 +5,9 @@ using std::endl;
 using std::cin;
 
 #define tab "\t"
-#define delimiter "\n-------------------------------------------------------\n"
+#define delimiter "\n--------------------------------------------------------------\n"
+
+#define DEBUG
 
 class List
 {
@@ -133,7 +135,7 @@ public:
 		~ReverseIterator()
 		{
 #ifdef DEBUG
-			cout << "RITDestructor:\t << this << endl;
+			cout << "RITDestructor:\t" << this << endl;
 #endif // DEBUG
 		}
 
@@ -218,6 +220,14 @@ public:
 		for (int i : other)puch_back(i);
 		cout << "CopyConstructor:\t" << this << endl;
 	}
+	List (List&& other)
+	{
+		this->size = other.size;
+		this->Head = other.Head;
+		this->Tail = other.Tail;
+		other.Head = other.Tail = nullptr;
+		cout << "MoveConstructor:\t" << this << endl;
+	}
 	~List()
 	{
 		//while (Head)pop_front();
@@ -232,6 +242,16 @@ public:
 		while (Head)pop_front();
 		for (int i : other)puch_back(i);
 		cout << "CopyAssignment:\t" << this << endl;
+	}
+	List& operator=(List&& other)
+	{
+		while (Head)pop_front();
+		this->size = other.size;
+		this->Head = other.Head;
+		this->Tail = other.Tail;
+		other.Head = other.Tail = nullptr;
+		cout << "MoveAssignment:\t" << this << endl;
+		return *this;
 	}
 	int& operator[](int index)
 	{
@@ -475,6 +495,10 @@ void main()
 
 	List list1 = { 3,5,8,13,21 };
 	List list2 = { 34,55,89 };
-	List list3 = list1 + list2;
+	cout << delimiter << endl;
+	//List list3 = list1 + list2;//MoveConstructor
+	List list3;
+	list3 = list1 + list2;//MoveAssignment
+	cout << delimiter << endl;
 	list3.print();
 }
