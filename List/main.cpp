@@ -16,23 +16,12 @@ template<typename T>class List
 		Element* pNext;//указатель на следующий элемент
 		Element* pPrev;//указатель на предыдущий элемент
 	public:
-		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr)
-		{
-			this->Data = Data;
-			this->pNext = pNext;
-			this->pPrev = pPrev;
-#ifdef DEBUG
-			cout << "EConstructor:\t" << this << endl;
-#endif // DEBUG
-		}
-		~Element()
-		{
-#ifdef DEBUG
-			cout << "EDestructor:\t" << this << endl;
-#endif // DEBUG
-		}
+		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr);
+		~Element();
 		friend class List<T>;
 	};
+
+
 	Element* Head;
 	Element* Tail;
 	unsigned int size;
@@ -415,6 +404,23 @@ template<typename T>void List<T>::print_reverse()
 
 ///////////////////////////////////////////////////////
 
+template<typename T> List<T>::Element::Element(T Data, Element* pNext, Element* pPrev)
+{
+	this->Data = Data;
+	this->pNext = pNext;
+	this->pPrev = pPrev;
+#ifdef DEBUG
+	cout << "EConstructor:\t" << this << endl;
+#endif // DEBUG
+}
+template<typename T>List<T>::Element::~Element()
+{
+#ifdef DEBUG
+	cout << "EDestructor:\t" << this << endl;
+#endif // DEBUG
+}
+///////////////////////////////////////////////////////
+
 template<typename T>List<T> operator+(const List<T>& left, const List<T>& right)
 {
 	List<T> cat = left;
@@ -432,9 +438,9 @@ template<typename T>List<T> operator+(const List<T>& left, const List<T>& right)
 void main()
 {
 	setlocale(LC_ALL, "Russian");
+#ifdef BASE_CHECK
 	int n;
 	cout << "Введите размер списка: "; cin >> n;
-#ifdef BASE_CHECK
 	List list;
 	for (int i = 0; i < n; i++)
 		list.puch_back(rand()%100);
@@ -461,6 +467,7 @@ void main()
 	list.print_reverse();
 	cout << delimiter << endl;
 #endif // BASE_CHECK
+
 
 #ifdef SIZE_CONSTRUCTOR_AND_INDEX_OPERATOR
 	List list(n);
