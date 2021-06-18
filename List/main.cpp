@@ -539,4 +539,6 @@ void main()
 	d_list.print();
 	List<string> s_list = { "What", "can", "I", "do" };
 	for (string i : s_list)cout << i << tab; cout << endl;
+	for (List<string>::Iterator it = s_list.begin(); it != s_list.end(); it++) cout << *it << tab; cout << endl;
+	for (List<string>::ReverseIterator it = s_list.rbegin(); it != s_list.rend(); it++) cout << *it << tab; cout << endl;
 }
