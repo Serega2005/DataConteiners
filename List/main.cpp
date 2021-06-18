@@ -50,42 +50,12 @@ public:
 	class ReverseIterator :public BaseIterator
 	{
 	public:
-		ReverseIterator(Element* Temp = nullptr) :BaseIterator(Temp)
-		{
-#ifdef DEBUG
-			cout << "RITConstructor:\t" << this << endl;
-#endif // DEBUG
-		}
-		~ReverseIterator()
-		{
-#ifdef DEBUG
-			cout << "RITDestructor:\t" << this << endl;
-#endif // DEBUG
-		}
-
-		ReverseIterator& operator++()
-		{
-			BaseIterator::Temp = BaseIterator::Temp->pPrev;
-			return *this;
-		}
-		ReverseIterator operator++(int)
-		{
-			ReverseIterator old = *this;
-			BaseIterator::Temp = BaseIterator::Temp->pPrev;
-			return old;
-		}
-
-		ReverseIterator& operator--()
-		{
-			BaseIterator::Temp = BaseIterator::Temp->pNext;
-			return *this;
-		}
-		ReverseIterator operator--(int)
-		{
-			ReverseIterator old = *this;
-			BaseIterator::Temp = BaseIterator::Temp->pNext;
-			return old;
-		}
+		ReverseIterator(Element* Temp = nullptr);
+		~ReverseIterator();
+		ReverseIterator& operator++();
+		ReverseIterator operator++(int);
+		ReverseIterator& operator--();
+		ReverseIterator operator--(int);
 	};
 	size_t getSize()const;
 	const Iterator begin()const;
@@ -393,40 +363,77 @@ template<typename T>bool List<T>::BaseIterator::operator!=(const BaseIterator& o
 }
 ////////////////////////////////////////////////////////
 
-Iterator(Element* Temp = nullptr) :BaseIterator(Temp)
+template<typename T>List<T>::Iterator::Iterator(Element* Temp) :BaseIterator(Temp)
 {
 #ifdef DEBUG
 	cout << "ITConstructor:\t" << this << endl;
 #endif // DEBUG
 }
-~Iterator()
+template<typename T>List<T>::Iterator::~Iterator()
 {
 #ifdef DEBUG
 	cout << "ITDestructor:\t" << this << endl;
 #endif // DEBUG
 }
 
-Iterator& operator++()
+template<typename T>typename List<T>::Iterator& List<T>::Iterator::operator++()
 {
 	BaseIterator::Temp = BaseIterator::Temp->pNext;
 	return*this;
 }
-Iterator operator++(int)
+template<typename T>typename List<T>::Iterator List<T>::Iterator::operator++(int)
 {
 	Iterator old = *this;
 	BaseIterator::Temp = BaseIterator::Temp->pNext;
 	return old;
 }
 
-Iterator& operator--()
+template<typename T>typename List<T>::Iterator& List<T>::Iterator::operator--()
 {
 	BaseIterator::Temp = BaseIterator::Temp->pPrev;
 	return*this;
 }
-Iterator operator--(int)
+template<typename T>typename List<T>::Iterator List<T>::Iterator::operator--(int)
 {
 	Iterator old = *this;
 	BaseIterator::Temp = BaseIterator::Temp->pPrev;
+	return old;
+}
+////////////////////////////////////////////////////////
+template<typename T>List<T>::ReverseIterator::ReverseIterator(Element* Temp) :BaseIterator(Temp)
+{
+#ifdef DEBUG
+	cout << "RITConstructor:\t" << this << endl;
+#endif // DEBUG
+}
+template<typename T>List<T>::ReverseIterator::~ReverseIterator()
+{
+#ifdef DEBUG
+	cout << "RITDestructor:\t" << this << endl;
+#endif // DEBUG
+}
+
+template<typename T>typename List<T>::ReverseIterator& List<T>::ReverseIterator::operator++()
+{
+	BaseIterator::Temp = BaseIterator::Temp->pPrev;
+	return *this;
+}
+template<typename T>typename List<T>::ReverseIterator List<T>::ReverseIterator::operator++(int)
+{
+	ReverseIterator old = *this;
+	BaseIterator::Temp = BaseIterator::Temp->pPrev;
+	return old;
+}
+
+template<typename T>typename List<T>::ReverseIterator& List<T>::ReverseIterator::operator--()
+{
+	BaseIterator::Temp = BaseIterator::Temp->pNext;
+	return *this;
+}
+template<typename T>typename List<T>::ReverseIterator List<T>::ReverseIterator::operator--(int)
+{
+	ReverseIterator old = *this;
+	BaseIterator::Temp = BaseIterator::Temp->pNext;
 	return old;
 }
 ////////////////////////////////////////////////////////
