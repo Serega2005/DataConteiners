@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include<iostream>
 #include<string>
 #include"List.h"
@@ -11,7 +12,6 @@ using std::endl;
 #define delimiter "\n-----------------------------------------------------\n"
 
 //#define DEBUG
-template<typename T>
 class Element
 {
 	T Data;		//Значение элемента
